@@ -1,43 +1,60 @@
 import './RegisterForm.scss';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 const RegisterForm = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors }
+    watch,
+    formState: { errors },
   } = useForm();
   const [formData, setFormData] = React.useState(null);
 
   const onSubmit = (data) => setFormData(data);
+  const { formatMessage } = useIntl();
+
+  // Prueba de mensaje traducido en Javascript
+  console.log(formatMessage({ id: 'hello' }));
+
   return (
-    <div className='register__form'>
-      <h1>Formulario de Registro</h1>
+    <div className='register-form'>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <fieldset className='register__form-fieldset'>
+        <fieldset className='register-form__fieldset'>
           <input
-            placeholder='First Name'
+            placeholder={formatMessage({ id: 'register_form:first_name' })}
             type='text'
             {...register('firstName', { required: true })}
           />
-          {errors?.firstName && <p className='register__form-error'> Este campo es obligatorio </p>}
+          {errors?.firstName && (
+            <p className='register-form__error'>
+              <FormattedMessage id='register_form:required_field' />
+            </p>
+          )}
         </fieldset>
-        <fieldset className='register__form-fieldset'>
+        <fieldset className='register-form__fieldset'>
           <input
-            placeholder='LastName'
+            placeholder={formatMessage({ id: 'register_form:last_name' })}
             type='text'
             {...register('lastName', { required: true, minLength: 3 })}
           />
-          {errors?.lastName && <p className='register__form-error'> Este campo es obligatorio y debe almenos tener 3 caracteres</p>}
+          {errors?.lastName && (
+            <p className='register-form__error'>
+              <FormattedMessage id='register_form:required_field_3_chars' />
+            </p>
+          )}
         </fieldset>
-
-        <button className='register__form-button'>Aceptar</button>
+        <button type='submit'>Aceptar</button>
       </form>
 
-      <h2>Datos del Formulario</h2>
-      <p>Nombre: {formData?.firstName}</p>
-      <p>Apellido: {formData?.lastName}</p>
+      <h2>Datos del formulario:</h2>
+      <p>First name: {formData?.firstName}</p>
+      <p>Last name: {formData?.lastName}</p>
+
+      <h2>Datos del formulario en "caliente":</h2>
+      <p>First name: {watch('firstName')}</p>
+      <p>Last name: {watch('lastName')}</p>
     </div>
   );
 };

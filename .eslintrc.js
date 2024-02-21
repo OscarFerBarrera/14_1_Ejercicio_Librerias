@@ -42,6 +42,7 @@ module.exports = {
     'react/jsx-indent': [2, 2],
     'react/prop-types': 'off',
     'jsx-quotes': [2, 'prefer-single'],
-    'react/no-unescaped-entities': 'off'
+    'react/no-unescaped-entities': 'off',
+    'comma-dangle': 'off'
   }
 }
